@@ -1,10 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yellow_vbox/routes.dart';
 
 import 'boxplayer.dart';
 import 'pipcamera.dart';
+import 'startscreen.dart';
 
+//todo: ios internet perms
+//todo: ios firebase
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -46,13 +50,15 @@ class YellowVBox extends StatelessWidget {
         accentColor: Colors.amberAccent,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          BoxPlayer(),
-          PipCamera(camera: camera, frontCam: frontCam,)
-        ],
-      ),
+      routes: Approutes.define(),
+      home: StartScreen(),
+      // Stack(
+      //   fit: StackFit.expand,
+      //   children: <Widget>[
+      //     BoxPlayer(),
+      //     PipCamera(camera: camera, frontCam: frontCam,)
+      //   ],
+      // ),
     );
   }
 }

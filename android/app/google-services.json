@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "903911889660",
+    "firebase_url": "https://yellowvbox.firebaseio.com",
+    "project_id": "yellowvbox",
+    "storage_bucket": "yellowvbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903911889660:android:803d5997bb65255c6cd579",
+        "android_client_info": {
+          "package_name": "com.test.yellow_vbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903911889660-09r58u63j78724pppa7mn5985e6ct781.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI4DXxcpq_UZImxJyqOT9c8eszgoXglgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903911889660-09r58u63j78724pppa7mn5985e6ct781.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
