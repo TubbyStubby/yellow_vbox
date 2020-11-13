@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yellow_vbox/routes.dart';
@@ -13,34 +14,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+  Firebase.initializeApp();
   
-  final cameras = await availableCameras();
-  var camera;
-  bool frontCam = false;
-
-  if(cameras.length > 1) {
-    camera = cameras[1];
-    frontCam = true;
-  } else {
-    camera = cameras.first;
-  }
-
-  runApp(YellowVBox(camera: camera, frontCam: frontCam));
+  runApp(YellowVBox());
 }
 
 //todo: make firebase login 
 //todo: add different source for video
 class YellowVBox extends StatelessWidget {
-
-  final CameraDescription camera;
-  final bool frontCam;
-
-  const YellowVBox({
-    Key key,
-    @required this.camera,
-    @required this.frontCam,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,7 +37,7 @@ class YellowVBox extends StatelessWidget {
       //   fit: StackFit.expand,
       //   children: <Widget>[
       //     BoxPlayer(),
-      //     PipCamera(camera: camera, frontCam: frontCam,)
+      //     PipCamera()
       //   ],
       // ),
     );

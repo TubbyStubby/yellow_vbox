@@ -8,15 +8,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class PipCamera extends StatefulWidget {
-  final CameraDescription camera;
-    final bool frontCam;
-
-  const PipCamera({
-    Key key,
-    @required this.camera,
-    @required this.frontCam,
-  }) : super(key: key);
-
   @override
   _PipCameraState createState() => _PipCameraState();
 }
@@ -24,6 +15,7 @@ class PipCamera extends StatefulWidget {
 class _PipCameraState extends State<PipCamera> {
   double _bottomPos = 10, _rightPos = 10;
 
+  bool frontCam = false, isCamReady = false;
   CameraController _cameraController;
   Future<void> _initCamControllerFuture;
 
@@ -32,17 +24,46 @@ class _PipCameraState extends State<PipCamera> {
   @override
   void initState() {
     super.initState();
-    _cameraController = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
+    _getCam();
+    // _cameraController = CameraController(
+    //   widget.camera,
+    //   ResolutionPreset.medium,
+    // );
+
+    // _initCamControllerFuture = _cameraController.initialize();
+  }
+
+  Future<void> _getCam() async {
+    final cameras = await availableCameras();
+    var cam;
+    if(cameras.length > 1) {
+      frontCam = true;
+      cam = cameras[1];
+    } else {
+      cam = cameras.first;
+    }
+
+    _cameraController = CameraController(cam, ResolutionPreset.medium);
 
     _initCamControllerFuture = _cameraController.initialize();
+
+    if(!mounted) {
+      return;
+    }
+    setState(() {
+      isCamReady = true;
+    });
+  }
+
+  void didChangeAppLifeCycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed && _cameraController != null) {
+      _initCamControllerFuture = _cameraController.initialize();
+    }
   }
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    _cameraController?.dispose();
     super.dispose();
   }
 

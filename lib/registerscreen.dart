@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yellow_vbox/routes.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -9,9 +12,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _userIdController;
-  TextEditingController _userPassController;
-  TextEditingController _userPassRepeatController;
+  TextEditingController _userIdController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _userPassController = TextEditingController();
+  TextEditingController _userPassRepeatController = TextEditingController();
   bool isSubmitting = true;
 
   @override
@@ -26,8 +30,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         color: Colors.black,
       ),
       decoration: InputDecoration(
-        hintText:  'UserName / Email',
-        labelText: 'UserId',
+        hintText:  'someone@someplace.com',
+        labelText: 'Email',
+        labelStyle: TextStyle(color: Colors.black54),
+        hintStyle: TextStyle(color: Colors.black38)
+      ),
+    );
+
+    final userNameField = TextFormField(
+      controller: _userNameController,
+      keyboardType: TextInputType.name,
+      enabled: isSubmitting,
+      style: TextStyle(
+        color: Colors.black,
+      ),
+      decoration: InputDecoration(
+        hintText:  'John Doe',
+        labelText: 'User Name',
         labelStyle: TextStyle(color: Colors.black54),
         hintStyle: TextStyle(color: Colors.black38)
       ),
@@ -66,6 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final fields = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        userNameField,
         userIdField,
         userPassField,
         userPassRepeatField
@@ -79,7 +99,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: MaterialButton(
         minWidth: mq.size.width / 1.2,
         padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-        onPressed: () => {}, //todo register auth
+        onPressed: () async {
+          try {
+            final User user = (await _auth.createUserWithEmailAndPassword(
+                email: _userIdController.text,
+                password: _userPassController.text,
+              )
+            ).user;
+            if(user != null) {
+              user.updateProfile(displayName: _userNameController.text, photoURL: "");
+              Navigator.of(context).pushNamed(Approutes.homePage);
+            }
+          } catch(e) {
+            print(e);
+            _userPassController.text = "";
+            _userPassRepeatController.text = "";
+            _userIdController.text = "";
+            _userNameController.text = "";
+            //todo error dialog
+          }
+        },
         child: Text(
           'Register',
           textAlign: TextAlign.center,

@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yellow_vbox/routes.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,8 +12,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _userIdController;
-  TextEditingController _userPassController;
+  TextEditingController _userIdController = TextEditingController();
+  TextEditingController _userPassController = TextEditingController();
   bool isSubmitting = true;
 
   @override
@@ -62,7 +65,23 @@ class _LoginScreenState extends State<LoginScreen> {
       child: MaterialButton(
         minWidth: mq.size.width / 1.2,
         padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-        onPressed: () => {}, //todo login auth
+        onPressed: () async {
+          try {
+            final User user = (await _auth.signInWithEmailAndPassword(
+                email: _userIdController.text,
+                password: _userPassController.text
+              )
+            ).user;
+            if(user != null) {
+              Navigator.of(context).pushNamed(Approutes.homePage);
+            }
+          } catch(e) {
+            print(e);
+            _userPassController.text = "";
+            _userIdController.text = "";
+            //todo error dialog
+          }
+        },
         child: Text(
           'Login',
           textAlign: TextAlign.center,
