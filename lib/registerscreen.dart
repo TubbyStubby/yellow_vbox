@@ -55,6 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     final userPassField = TextFormField(
+      obscureText: true,
       controller: _userPassController,
       keyboardType: TextInputType.visiblePassword,
       enabled: isSubmitting,
@@ -70,6 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     final userPassRepeatField = TextFormField(
+      obscureText: true,
       controller: _userPassRepeatController,
       keyboardType: TextInputType.visiblePassword,
       enabled: isSubmitting,
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               )
             ).user;
             if(user != null) {
-              user.updateProfile(displayName: _userNameController.text, photoURL: "");
+              await user.updateProfile(displayName: _userNameController.text, photoURL: "");
               Navigator.of(context).pushReplacementNamed(Approutes.homePage);
             }
           } catch(e) {

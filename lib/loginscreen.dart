@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final userPassField = TextFormField(
+      obscureText: true,
       controller: _userPassController,
       keyboardType: TextInputType.visiblePassword,
       enabled: isSubmitting,
