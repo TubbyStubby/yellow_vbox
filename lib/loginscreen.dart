@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yellow_vbox/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: InputDecoration(
         hintText:  'UserName / Email',
         labelText: 'UserId',
+        labelStyle: TextStyle(color: Colors.black54),
         hintStyle: TextStyle(color: Colors.black38)
       ),
     );
@@ -40,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: InputDecoration(
         hintText:  'Password',
         labelText: 'Password',
+        labelStyle: TextStyle(color: Colors.black54),
         hintStyle: TextStyle(color: Colors.black38)
       ),
     );
@@ -88,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             MaterialButton(
-              onPressed: () => {},//todo go to signup
+              onPressed: () => Navigator.of(context).pushNamed(Approutes.authRegister),
               child: Text(
                 "Sign Up",
                 style: TextStyle(color: Colors.black87,),
