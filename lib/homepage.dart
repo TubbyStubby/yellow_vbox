@@ -16,6 +16,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool showSignout = false;
+  String userName;
+
+  @override
+  void initState() {
+    super.initState();
+    userName = _auth.currentUser.displayName;
+  }
 
   @override
   void dispose() {
@@ -50,6 +57,11 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+    final userGreeting = Text(
+      'Hello, $userName',
+      style: TextStyle(color: Colors.amber, fontSize: 15,),
+    );
+
     //todo add signed in info
     return Stack(
       fit: StackFit.expand,
@@ -63,10 +75,19 @@ class _HomePageState extends State<HomePage> {
         ),
         Positioned(
           top: 10,
-          right: 10,
+          width: MediaQuery.of(context).size.width,
           child: Visibility(
             visible: showSignout,            
-            child: signoutButton,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  userGreeting,
+                  signoutButton,
+                ],
+              ),
+            ),
           )
         ),
         PipCamera(),
