@@ -1,12 +1,16 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yellow_vbox/homepage.dart';
 import 'package:yellow_vbox/routes.dart';
 
 import 'boxplayer.dart';
 import 'pipcamera.dart';
 import 'startscreen.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 //todo: ios internet perms
 //todo: ios firebase
@@ -14,7 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   
   runApp(YellowVBox());
 }
@@ -32,7 +36,7 @@ class YellowVBox extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: Approutes.define(),
-      home: StartScreen(),
+      home: _auth.currentUser != null ? HomePage() : StartScreen(),
       // Stack(
       //   fit: StackFit.expand,
       //   children: <Widget>[
