@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:yellow_vbox/routes.dart';
 
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -73,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
               )
             ).user;
             if(user != null) {
-              Navigator.of(context).pushNamed(Approutes.homePage);
+              Navigator.of(context).pushReplacementNamed(Approutes.homePage);
             }
           } catch(e) {
             print(e);
@@ -110,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             MaterialButton(
-              onPressed: () => Navigator.of(context).pushNamed(Approutes.authRegister),
+              onPressed: () => Navigator.of(context).pushReplacementNamed(Approutes.authRegister),
               child: Text(
                 "Sign Up",
                 style: TextStyle(color: Colors.black87,),

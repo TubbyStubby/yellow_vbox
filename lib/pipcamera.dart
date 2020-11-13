@@ -1,6 +1,3 @@
-//todo: move to pip file
-// todo: make it minimizable
-// todo: set initial to minimized if only 1 camera
 // todo: change cameras
 import 'dart:math';
 
@@ -15,7 +12,7 @@ class PipCamera extends StatefulWidget {
 class _PipCameraState extends State<PipCamera> {
   double _bottomPos = 10, _rightPos = 10;
 
-  bool frontCam = false, isCamReady = false;
+  bool showCam = false, isCamReady = false;
   CameraController _cameraController;
   Future<void> _initCamControllerFuture;
 
@@ -37,7 +34,7 @@ class _PipCameraState extends State<PipCamera> {
     final cameras = await availableCameras();
     var cam;
     if(cameras.length > 1) {
-      frontCam = true;
+      showCam = true;
       cam = cameras[1];
     } else {
       cam = cameras.first;
@@ -73,7 +70,7 @@ class _PipCameraState extends State<PipCamera> {
     final screenWidth = screenSize.width, screenHeight = screenSize.height;
 
     final rb = context.findRenderObject() as RenderBox;
-    final pipHeight = rb?.size?.height ?? 0, pipWidth = rb?.size?.width ?? 0;
+    final pipHeight = (rb?.size)?.height ?? 0, pipWidth = (rb?.size)?.width ?? 0;
 
     var edgeDistance = 5.0;
     var hzFarLimit = screenWidth - edgeDistance - pipWidth;
@@ -86,7 +83,10 @@ class _PipCameraState extends State<PipCamera> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _pipZoom = _pipZoom > 1.0 ? 1.0 : 1.5;
+            _pipZoom = showCam ? 0.25 : 1.0;
+          });
+          setState(() {
+            showCam = !showCam;
           });
         },
         onPanUpdate: (DragUpdateDetails details) {
@@ -104,23 +104,29 @@ class _PipCameraState extends State<PipCamera> {
           });          
         },
         child: Card(
-          color: Colors.black,
+          color: showCam ? Colors.black: Colors.amberAccent,
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: RotatedBox(
               quarterTurns: -1,
+              child: Visibility(
+                visible: showCam,
+                maintainAnimation: true,
+                maintainSize: true,
+                maintainState: true,
                 child: FutureBuilder<void>(
-                future: _initCamControllerFuture,
-                builder: (ctx, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.done) {
-                    return AspectRatio(
-                      aspectRatio: _cameraController.value.aspectRatio,
-                      child: CameraPreview(_cameraController)
-                    );
-                  } else {
-                    return Center( child: CircularProgressIndicator(), );
-                  }
-                },
+                  future: _initCamControllerFuture,
+                  builder: (ctx, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.done) {
+                      return AspectRatio(
+                        aspectRatio: _cameraController.value.aspectRatio,
+                        child: CameraPreview(_cameraController)
+                      );
+                    } else {
+                      return Center( child: CircularProgressIndicator(), );
+                    }
+                  },
+                ),
               ),
             ),
           )

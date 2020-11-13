@@ -5,7 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 class BoxPlayer extends StatefulWidget {
-  BoxPlayer({Key key}) : super(key: key);
+  final Function onTapCallback;
+
+  BoxPlayer({
+    Key key,
+    this.onTapCallback,
+  }) : super(key: key);
 
   @override
   _BoxPlayerState createState() => _BoxPlayerState();
@@ -15,12 +20,13 @@ class _BoxPlayerState extends State<BoxPlayer> {
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
-  bool _greyOverlayVisibility = true;
+  bool _greyOverlayVisibility = false;
   bool _volumeSliderVisibility = false;
   double _currentVolume = 0;
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
     _controller = VideoPlayerController.network(
@@ -28,10 +34,9 @@ class _BoxPlayerState extends State<BoxPlayer> {
     );
 
     _initializeVideoPlayerFuture = _controller.initialize().then((value) {
-      setState(() {
-        _currentVolume = _controller.value.volume;
-      });
+      _currentVolume = _controller.value.volume;
       _controller.setLooping(true);
+      _controller.play();
     });
 
     super.initState();
@@ -77,6 +82,8 @@ class _BoxPlayerState extends State<BoxPlayer> {
               });
             },
             onTap: () {
+              if(widget.onTapCallback != null)
+                widget.onTapCallback();
               setState(() {
                 if(_controller.value.isPlaying) {
                   _controller.pause();
@@ -110,6 +117,8 @@ class _BoxPlayerState extends State<BoxPlayer> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
+                    if(widget.onTapCallback != null)
+                      widget.onTapCallback();
                     _greyOverlayVisibility = false;
                     _controller.play();
                   });

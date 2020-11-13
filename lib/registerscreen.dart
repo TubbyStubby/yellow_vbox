@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:yellow_vbox/routes.dart';
 
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -108,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ).user;
             if(user != null) {
               user.updateProfile(displayName: _userNameController.text, photoURL: "");
-              Navigator.of(context).pushNamed(Approutes.homePage);
+              Navigator.of(context).pushReplacementNamed(Approutes.homePage);
             }
           } catch(e) {
             print(e);
@@ -147,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             MaterialButton(
-              onPressed: () => Navigator.of(context).pushNamed(Approutes.authLogin),
+              onPressed: () => Navigator.of(context).pushReplacementNamed(Approutes.authLogin),
               child: Text(
                 "Login",
                 style: TextStyle(color: Colors.black87,),
